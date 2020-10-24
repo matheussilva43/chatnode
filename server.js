@@ -16,12 +16,26 @@ let connecteUsers = [];
 io.on('connection', (socket) => {
     console.log("Conexão detectada...");
 
-socket.on('join-request', (username) => {
-    socket.username = username;
-    connecteUsers.push( username );
-    console.log( connecteUsers );
+    socket.on('join-request', (username) => {
+        socket.username = username;
+        connecteUsers.push( username );
+        console.log( connecteUsers );
 
-    socket.emit('user-ok', connecteUsers);
-});
+        socket.emit('user-ok', connecteUsers);
+        socket.broadcast.emit('list-update', {
+            joined: username,
+            list: connecteUsers
+        });
+    });
+
+    socket.on('disconnect', (username) => {
+        connecteUsers = connecteUsers.filter(u => u != socket.username);
+        console.log(connecteUsers);
+
+        socket.broadcast.emit('list-update', {
+            left: socket.username,
+            list: connecteUsers
+        });
+    });
 
 });
