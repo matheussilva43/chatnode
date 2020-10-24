@@ -15,7 +15,7 @@ ul, li {
 }
 
 #loginPage {
-    display: none;
+    display: flex;
     background-color: #FFF;
 }
 #loginNameInput {
@@ -29,7 +29,7 @@ ul, li {
     max-width: 400px;
 }
 #chatPage {
-    display: flex;
+    display: none;
 }
 
 .chatArea {
