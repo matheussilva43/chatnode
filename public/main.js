@@ -28,7 +28,7 @@ function addMessage(type, user, msg) {
             ul.innerHTML += '<li class="m-status">'+msg+'</li>';
             break;
         case 'msg':
-            ul.innerHTML += '<li class="m-text"><span>'+user+'<span> '+msg+'</li>';
+            ul.innerHTML += '<li class="m-txt"><span>'+user+'</span> '+msg+'</li>';
             break;
     }
 }
@@ -41,6 +41,18 @@ loginInput.addEventListener('keyup', (e) => {
             document.title = 'Chat ('+username+')';
 
             socket.emit('join-request', username);
+        }
+    }
+});
+
+textInput.addEventListener('keyup', (e) => {
+    if(e.keyCode === 13 ){
+        let txt = textInput.value.trim();
+        textInput.value = '';
+
+        if(txt != '') {
+            addMessage('msg', username, txt);
+            socket.emit('send-msg', txt);
         }
     }
 });
@@ -66,4 +78,8 @@ socket.on('list-update', (data) => {
     
     userList = data.list;
     renderUserList();
+});
+
+socket.on('show-msg', (data) => {
+    addMessage('msg', data.username, data.message);
 });
